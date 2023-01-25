@@ -6,10 +6,10 @@
 const { v4: uuidv4 } = require("uuid");
 const imported = require("./inventory.js");
 
-console.log('Sallad: ' + imported.inventory['Sallad']);
+console.log('Sallad:', imported.inventory['Sallad']);
 
 console.log('Object.keys():')
-let names = Object.keys(imported.inventory);
+const names = Object.keys(imported.inventory);
 names
   .sort((a, b) => a.localeCompare(b, "sv", { sensitivity: 'case' }))
   .forEach(name => console.log(name));
