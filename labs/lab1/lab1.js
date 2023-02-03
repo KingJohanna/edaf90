@@ -20,7 +20,7 @@ for (const name in imported.inventory) {
 }
 /**
  * Reflection question 2
- * the outputs are the same since the properties are enumerable and own
+ * the outputs are the same since the properties are enumerable and own. sort() will not print because it doesn't work on own data?
  */
 
 console.log('\n--- Assignment 1 ---------------------------------------')
@@ -45,6 +45,7 @@ class Salad {
     this.ingredients = {};
 
     if (typeof salad !== "undefined") {
+      // uuidv4 for salad if string
       Object.assign(this.ingredients, 
         typeof salad === "string" ? JSON.parse(salad)['ingredients'] : salad['ingredients']
       );
@@ -104,8 +105,8 @@ console.log('check 2: ' + (Object.prototype === Object.getPrototypeOf(Salad.prot
 
 /* Reflection question 3
 
-A class is represented as a function. Every object has a prototype which points to a map where 
-attributes can be assigned that should be able to be accessed from all objects created 
+A class is represented as a function. Every object has a prototype which points to a map. 
+This map's attributes can be assigned and be accessed from all objects created 
 with that function as the constructor. The prototype chain ends with Object.prototype (null). 
 
 */
@@ -127,6 +128,7 @@ console.log('\n--- Assignment 5 ---------------------------------------')
 class GourmetSalad extends Salad {
   
   add(name, properties, size=1) {
+    // super.add after adding size to properties
     let propCopy = Object.assign({}, properties);
     propCopy['size'] = size + (this.ingredients[name] ? this.ingredients[name]['size'] : 0); 
     this.ingredients[name] = propCopy;
