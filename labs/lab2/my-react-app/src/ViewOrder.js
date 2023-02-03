@@ -1,5 +1,19 @@
 import React from "react";
 
+function SaladCard(uuid, price, foundation, protein, extras, dressing) {
+  return (
+    <div key={uuid} className="card">
+      <div className="card-header">{uuid}, {price} SEK</div>
+      <ul className="list-group list-group-flush">
+        <li className="list-group-item">{foundation}</li>
+        <li className="list-group-item">{protein}</li>
+        <li className="list-group-item">{extras.join(", ")}</li>
+        <li className="list-group-item">{dressing}</li>
+      </ul>
+    </div>
+  );
+}
+
 function ViewOrder(props) {
   return (
     <div className="container col-12">
@@ -20,17 +34,7 @@ function ViewOrder(props) {
               name => salad.ingredients[name].extra
             );
 
-            return (
-              <div key={salad.uuid}>
-                <h6>
-                  Bas: {foundation} <br />
-                  Protein: {protein} <br />
-                  Tillbehör: {extras.join(", ")} <br />
-                  Dressing: {dressing} <br />
-                </h6>
-                <hr className="rounded" />
-              </div>
-            );
+            return SaladCard(salad.uuid, salad.getPrice(), foundation, protein, extras, dressing);
           })}
           <h4>
             Pris: {props.cart.reduce((acc, salad) => acc + salad.getPrice(), 0)}{" "}
