@@ -1,22 +1,30 @@
 import React, { useState, useMemo, useRef } from "react";
 import "bootstrap/dist/css/bootstrap.css";
 import Salad from "./Salad";
+import { NavLink } from "react-router-dom";
 
-function SelectForm({ ingredients, prompt, set }) {
+function SelectForm({ ingredients, prompt, set, startVal }) {
   return (
-    <select
-      className="form-select"
-      onChange={event => {
-        set(event.target.value); // setFoundation is async so this will print the last value
-      }}
-    >
-      <option defaultValue={false}>{prompt}</option>
-      {ingredients.map(name => (
-        <option key={name} value={name}>
-          {name}
-        </option>
-      ))}
-    </select>
+    <div className="form-group">
+      <select
+        className="form-select"
+        onChange={event => {
+          set(event.target.value); // setFoundation is async so this will print the last value
+          event.target.parentElement.classList.add("was-validated");
+        }}
+        required
+        value={startVal}
+      >
+        <option value="">{prompt}</option>
+        {ingredients.map(name => (
+          <option key={name} value={name}>
+            {name}
+          </option>
+        ))}
+      </select>
+      <div className="invalid-feedback">Välj en giltig ingrediens!</div>
+      <div className="valid-feedback">Mums!</div>
+    </div>
   );
 }
 
@@ -49,10 +57,10 @@ function ComposeSalad(props) {
     );
   });
 
-  const [foundation, setFoundation] = useState("");
-  const [protein, setProtein] = useState("");
+  const [foundation, setFoundation] = useState();
+  const [protein, setProtein] = useState();
   const [extra, setExtra] = useState({});
-  const [dressing, setDressing] = useState("");
+  const [dressing, setDressing] = useState();
 
   const composeSalad = useRef(null);
 
@@ -60,24 +68,27 @@ function ComposeSalad(props) {
     <div className="container col-12">
       <form
         ref={composeSalad}
+        noValidate={true}
         onSubmit={e => {
-          let salad = new Salad();
-          salad.add(foundation, props.inventory[foundation]);
-          salad.add(protein, props.inventory[protein]);
-          Object.keys(extra).map(ingredient => {
-            if (extra[ingredient]) {
-              salad.add(ingredient, props.inventory[ingredient]);
-            }
-            return null; // return value required by map
-          });
-          salad.add(dressing, props.inventory[dressing]);
-          props.updateCart(oldCart => [...oldCart, salad]);
+          if (e.target.checkValidity()) {
+            let salad = new Salad();
+            salad.add(foundation, props.inventory[foundation]);
+            salad.add(protein, props.inventory[protein]);
+            Object.keys(extra).map(ingredient => {
+              if (extra[ingredient]) {
+                salad.add(ingredient, props.inventory[ingredient]);
+              }
+              return null; // return value required by map
+            });
+            salad.add(dressing, props.inventory[dressing]);
+            props.updateCart(oldCart => [...oldCart, salad]);
+            props.navigate("/cart");
+            e.target.classList.add("was-validated");
+            composeSalad.current.reset();
+          } else {
+            alert("Välj giltiga ingredienser!");
+          }
           e.preventDefault();
-          setFoundation("");
-          setProtein("");
-          setExtra({});
-          setDressing("");
-          composeSalad.current.reset();
         }}
       >
         <div className="row h-200 p-5 bg-light border rounded-3">
@@ -87,11 +98,13 @@ function ComposeSalad(props) {
               ingredients={foundations}
               prompt="Välj bas"
               set={setFoundation}
+              startVal={foundation}
             />
             <SelectForm
               ingredients={proteins}
               prompt="Välj protein"
               set={setProtein}
+              startVal={protein}
             />
             <h6>Välj tillbehör</h6>
             <div className="form-check">
@@ -105,6 +118,7 @@ function ComposeSalad(props) {
                     type="checkbox"
                     id="inlineCheckbox1"
                     value={name}
+                    checked={extra[name] | false}
                     onChange={event => {
                       setExtra(oldState =>
                         copyAndUpdate(
@@ -115,7 +129,9 @@ function ComposeSalad(props) {
                       );
                     }}
                   />
-                  <label className="form-check-label">{name}</label>
+                  <NavLink to={`/view-ingredient/${name}`}>
+                    <label className="form-check-label">{name}</label>
+                  </NavLink>
                 </div>
               ))}
             </div>
@@ -123,6 +139,7 @@ function ComposeSalad(props) {
               ingredients={dressings}
               prompt="Välj dressing"
               set={setDressing}
+              startVal={dressing}
             />
             <div className="d-flex justify-content-center">
               <button type="submit" className="btn btn-primary w-25">

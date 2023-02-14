@@ -25,3 +25,4 @@ the value of "this" will be undefined or will refer to the global object unless 
 7)
 The spread operator creates a shallow copy, so the prototype chain does not change. The copy is a new object with a 
 different prototype chain.
+

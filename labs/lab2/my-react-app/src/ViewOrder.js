@@ -1,9 +1,12 @@
 import React from "react";
+import "bootstrap/dist/css/bootstrap.css";
 
 function SaladCard(uuid, price, foundation, protein, extras, dressing) {
   return (
     <div key={uuid} className="card">
-      <div className="card-header">{uuid}, {price} SEK</div>
+      <div className="card-header">
+        {uuid}, {price} SEK
+      </div>
       <ul className="list-group list-group-flush">
         <li className="list-group-item">{foundation}</li>
         <li className="list-group-item">{protein}</li>
@@ -34,7 +37,14 @@ function ViewOrder(props) {
               name => salad.ingredients[name].extra
             );
 
-            return SaladCard(salad.uuid, salad.getPrice(), foundation, protein, extras, dressing);
+            return SaladCard(
+              salad.uuid,
+              salad.getPrice(),
+              foundation,
+              protein,
+              extras,
+              dressing
+            );
           })}
           <h4>
             Pris: {props.cart.reduce((acc, salad) => acc + salad.getPrice(), 0)}{" "}
