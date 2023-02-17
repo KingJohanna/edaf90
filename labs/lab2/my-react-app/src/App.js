@@ -93,7 +93,7 @@ function App() {
                 />
               }
             />
-            <Route path="cart" element={<ViewOrder cart={cart} />} />
+            <Route path="cart" element={<ViewOrder cart={cart} updateCart={setCart} />} />
             <Route path="*" element={<NotFound />} />
             <Route
               path="view-ingredient/:name"

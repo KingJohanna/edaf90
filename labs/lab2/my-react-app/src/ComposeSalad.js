@@ -143,7 +143,7 @@ function ComposeSalad(props) {
             />
             <div className="d-flex justify-content-center">
               <button type="submit" className="btn btn-primary w-25">
-                Beställ
+                Lägg till i kundkorg
               </button>
             </div>
           </div>
