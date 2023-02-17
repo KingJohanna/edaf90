@@ -109,17 +109,13 @@ function fetchIngredients(type) {
   return ingredients;
 }
 
-function addIngredient(ingredient, property, inventory) {
-  inventory[ingredient] = property;
-}
-
 function App() {
   const [cart, setCart] = useState([]);
   const [inventory, setInventory] = useState({})
   const types = ['foundations', 'proteins', 'extras', 'dressings'];
 
   useEffect(() => {
-    types.forEach(
+    types.map(
       type => fetchIngredients(type)
         .then(ingredients => Promise.all(ingredients.map(ingredient => fetchIngredient(type, ingredient)
           .then(properties => ({ name: ingredient, properties: properties })))))

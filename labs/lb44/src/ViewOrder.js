@@ -1,8 +1,31 @@
+const server_url = "http://localhost:8080";
+
+function handleOrder(cart, setCart) {
+    fetch(server_url + "/orders", {
+        method: 'POST',
+        headers: {
+            //'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(cart.map(salad => salad.ingredients))
+    })
+        .then(response => {
+            setCart([]);
+            if (!response.ok) {
+                throw new Error(`${server_url + "/orders"} returned status ${response.status}`);
+            }
+            return response.json();
+        });
+
+    console.log(JSON.stringify(cart.map(salad => Object.keys(salad.ingredients))));
+
+}
+
 function OrderButton(props) {
     if (props.cart.length === 0) {
         return <button className='btn btn-secondary px-3' disabled={true}>Beställ</button>;
     } else {
-        return <button className='btn btn-primary px-3' onClick={() => props.setCart([])}>Beställ</button>;
+        return <button className='btn btn-primary px-3' onClick={() => handleOrder(props.cart, props.setCart)}>Beställ</button>;
     }
 }
 
