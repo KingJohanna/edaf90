@@ -82,6 +82,7 @@ function ComposeSalad(props) {
             });
             salad.add(dressing, props.inventory[dressing]);
             props.updateCart(oldCart => [...oldCart, salad]);
+            window.localStorage.setItem("salad_" + salad.uuid, JSON.stringify(salad));
             props.navigate("/cart");
             e.target.classList.add("was-validated");
             composeSalad.current.reset();

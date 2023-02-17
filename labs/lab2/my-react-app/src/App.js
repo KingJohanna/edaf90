@@ -7,6 +7,7 @@ import ComposeSalad from "./ComposeSalad";
 import ViewOrder from "./ViewOrder";
 import NotFound from "./NotFound";
 import ViewIngredient from "./ViewIngredient";
+import Salad from "./Salad";
 
 // export NODE_OPTIONS=--openssl-legacy-provider
 
@@ -60,6 +61,16 @@ function App() {
   const types = ["foundations", "proteins", "extras", "dressings"];
 
   useEffect(() => {
+    if (window.localStorage.length > 0) {
+      for (let i = 0; i < window.localStorage.length; i++) {
+        let key = window.localStorage.key(i);
+    
+        if (key.substring(0,5) === "salad") {
+          let salad = new Salad(window.localStorage.getItem(key));
+          setCart(oldCart => [...oldCart, salad]);
+        }
+      }
+    }
     Promise.all(
       types.map(type => fetchIngredient(type)
         .then(category => Promise.all(

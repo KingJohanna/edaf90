@@ -64,6 +64,7 @@ function ViewOrder(props) {
           response.price
         )
       );
+      window.localStorage.clear();
       props.updateCart([]);
     });
   };
@@ -104,7 +105,6 @@ function ViewOrder(props) {
           ) : (
             <p>Din kundkorg är tom</p>
           )}
-
           <div className="d-flex justify-content-center">
             <button
               className="btn btn-primary w-25"
